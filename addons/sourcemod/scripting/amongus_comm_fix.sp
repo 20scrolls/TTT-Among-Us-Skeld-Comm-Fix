@@ -9,6 +9,7 @@
 
 #define PLUGIN_VERSION "0.00"
 
+ConVar ttt_distance;
 public Plugin myinfo = 
 {
 	name = "[AMONG US TTT] Comms Fix",
@@ -31,12 +32,19 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	HookEvent("round_start", Event_RoundStart);
+	
 }
 
 public void OnMapStart()
 {
-	 
-	 
+	char sBuffer[64];
+	GetCurrentMap(sBuffer, sizeof(sBuffer));
+	
+	if(StrContains(sBuffer, "ttt_among_us_skeld", false) != -1)
+	{
+		ttt_distance = FindConVar("traitor_secrets_distance");
+		SetConVarFloat(ttt_distance, 10000.0, false, false);
+	}
 }
 
 public void Event_RoundStart(Event event, const char[] name_e, bool dontBroadcast)
